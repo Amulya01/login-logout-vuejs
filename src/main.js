@@ -21,10 +21,17 @@ firebase.initializeApp({
   messagingSenderId: "91918690716"
 });
 /* eslint-disable no-new */
-new Vue({
-  el: "#app",
-  router,
-  store,
-  components: { App },
-  template: "<App/>"
+const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+  new Vue({
+    el: "#app",
+    router,
+    store,
+    render: h => h(App),
+    created() {
+      if (firebaseUser) {
+        store.dispatch("autoSignIn", firebaseUser);
+      }
+    }
+  });
+  unsubscribe();
 });

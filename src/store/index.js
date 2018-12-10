@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import firebase from "firebase";
 import router from "@/router";
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -25,7 +26,6 @@ export const store = new Vuex.Store({
   actions: {
     userSignUp({ commit }, payload) {
       commit("setLoading", true);
-
       firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
@@ -33,6 +33,7 @@ export const store = new Vuex.Store({
           commit("setUser", { email: firebaseUser.user.email });
           commit("setLoading", false);
           router.push("/home");
+          commit("setError", null);
         })
         .catch(error => {
           commit("setError", error.message);
@@ -54,6 +55,19 @@ export const store = new Vuex.Store({
           commit("setError", error.message);
           commit("setLoading", false);
         });
+    },
+    autoSignIn({ commit }, payload) {
+      commit("setUser", { email: payload.email });
+    },
+    userSignOut({ commit }) {
+      firebase.auth().signOut();
+      commit("setUser", null);
+      router.push("/");
+    }
+  },
+  getters: {
+    isAuthenticated(state) {
+      return state.user !== null && state.user !== undefined;
     }
   }
 });
