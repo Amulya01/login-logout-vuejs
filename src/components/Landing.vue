@@ -21,3 +21,8 @@
 <script>
 export default {};
 </script>
+<style scoped>
+body {
+  backgroud: url("https://uploads.codesandbox.io/uploads/user/af0d25e1-239e-4f8a-9e58-71a748fea8e5/tpJM-front-end.jpg");
+}
+</style>
